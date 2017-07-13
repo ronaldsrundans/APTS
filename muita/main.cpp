@@ -75,18 +75,24 @@ void free_spot(int *arr, int n, int &num)
     }
   }
 };
-void find_min(int *arr, int n, int &num)
+int find_min(int *arr, int n, int num)
 {
-    int m=arr[0];
+    int m=0;
     for(int i=0; i<n;i++)
     {
-      if(arr[i]>m)
-    {
-      m=arr[i];
-    }
+      if(arr[i]>0&&num==m)
+        {
+          //  cout<<"ieraksta"<<endl;
+            m=arr[i];
+         //   cout<<"m="<<m<<endl;
+        }
+     if(arr[i]<m && arr[i]!=0)
+        {
+            m=arr[i];
+            return m;
+        }
   }
-  num=m;
-
+  return m;
 }
 void change_arr(int *arr, int n, int pos)
 {
@@ -98,6 +104,7 @@ void get_out(int *arr_id, int *arr_time, int pos)
     change_arr(arr_id, 0, pos);
     change_arr(arr_time, 0, pos);
 }
+
 
 int main ()
 {
@@ -120,7 +127,7 @@ int main ()
       //  int r_sk;
         char c=0;
         elem *first_p=NULL, *last_p=NULL, *first_n=NULL, *last_n=NULL;
-        fstream fin("in1.txt", ios::in);
+        fstream fin("in3.txt", ios::in);
         fstream fout("out.txt", ios::out);
         fin.get(c);
         while(c>='0'and c<='9')///p_muitnieki
@@ -265,65 +272,67 @@ int main ()
                 else///parstaigasim sarakstus
                 {
                     elem *zp = first_p;
-                    elem *zn = first_n;
-                    while (zp!=NULL ||zn!=NULL)
+                    int last_p=0;
+
+                    while (zp!=NULL)///kamer ir iebrauceji
                     {
                         if(zp!=NULL)
                         {
                             int min_p=0;
-                            //cout << zp->n << endl;
+                            min_p=find_min(p_time,p_muitnieki, min_p);
+                            int delay_p=0;///kavejas
                             p_tmp=zp->n;
-                            find_min(p_time,p_muitnieki, min_p);
-                            cout << "min_p="<<min_p<< endl;
+                            if(last_p>p_tmp)
+                                {
+                                    delay_p=last_p-p_tmp;
+                                }
 
-                            if(p_free!=0)//&&(min_p!=0&&min_p>=p_tmp))///ja ir brivs muitnieks
+                          //  cout <<"min_p="<<min_p<< endl;
+                            if(p_free!=0)
                             {
                                 free_spot(id_p, p_muitnieki,p_space);///atrod vinu
                                 change_arr(id_p,p_tmp,p_space);///ienem vietu
-                                p_tmp=p_tmp+arr_p[p_space];///apr laiku
+
+                                p_tmp=delay_p+p_tmp+arr_p[p_space];///apr laiku
+                                //cout <<"p_tmp="<<p_tmp<< endl;
                                 change_arr(p_time,p_tmp,p_space);///saglaba laiku
                                 p_free--;///mazak brivo vietu
-
-                            }
-                            else
-                            {
-                                get_out(id_p, p_time, p_space);
-                                p_free++;
                                 zp=zp->next;
                                 delete_first(first_p);
                             }
-
-                        }
-                        if(zn!=NULL)
-                        {
-                            int min_n=0;
-                            //cout << zn->n << endl;
-                            n_tmp=zn->n;
-                            find_min(n_time,n_muitnieki, min_n);
-                            cout << "min_n="<<min_n<< endl;
-                            if(n_free!=0)
-                            {
-                                free_spot(id_n, n_muitnieki,n_space);
-                                change_arr(id_n,n_tmp,n_space);
-                                n_tmp=n_tmp+arr_n[n_space];
-                                change_arr(n_time,n_tmp,n_space);
-                                n_free--;
-
-                            }
                             else
                             {
-                                get_out(id_n, n_time, n_space);
-                                n_free++;
-                                zn=zn->next;
-                                delete_first(first_n);
+                                for(int j=0;j<p_muitnieki;j++)
+                                {
+                                    if(min_p==p_time[j])
+                                    {
+                                        last_p=p_time[j];
+                                        get_out(id_p, p_time,j);
+                                        p_free++;
+                                    }
+                                }
                             }
-
                         }
-                    p_tmp=0;
-                    n_tmp=0;
-                    n_space=0;
-                    p_space=0;
                     }
+
+                    while(zp==NULL&&p_free!=p_muitnieki)//&&min_p!=0)
+                    {
+                    int min_p=0;
+                    min_p=find_min(p_time,p_muitnieki, min_p);
+
+                   // cout <<"min_p="<<min_p<< endl;
+                            for(int j=0;j<p_muitnieki;j++)
+                                {
+                                    if(min_p==p_time[j])
+                                    {
+                                        get_out(id_p, p_time,j);
+                                        p_free++;
+                                    }
+                                }
+                                min_p=find_min(p_time,p_muitnieki, min_p);
+
+                    }
+
 
                 }
 
@@ -333,14 +342,14 @@ int main ()
         }
      //   print_arr(arr_p, p_muitnieki);
  // print_arr(arr_n, n_muitnieki);
-  cout << "id p=" << endl;
+  /*cout << "id p=" << endl;
  print_arr(id_p, p_muitnieki);
    cout << "id n=" << endl;
  print_arr(id_n, n_muitnieki);
   cout << "n time=" << endl;
  print_arr(n_time, n_muitnieki);
    cout << "p time=" << endl;
- print_arr(p_time, p_muitnieki);
+ print_arr(p_time, p_muitnieki);*/
  cout << "list p" << endl;
      print_list (first_p);
       cout << "list n" << endl;
