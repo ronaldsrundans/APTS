@@ -36,6 +36,12 @@ void delete_list (elem*&first)///saraksta dzesana
         p = first;
     };
 };
+void delete_first (elem*&first)///saraksta dzesana
+{
+    elem *p = first;
+    first = first->next;
+    delete p;
+};
 int sum(char &c, int &summa)
 {
         int n=0;
@@ -86,6 +92,12 @@ void change_arr(int *arr, int n, int pos)
 {
      arr[pos]=n;
 };
+void get_out(int *arr_id, int *arr_time, int pos)
+{
+    cout<<arr_id[pos]<<" "<<arr_time[pos]<<endl;
+    change_arr(arr_id, 0, pos);
+    change_arr(arr_time, 0, pos);
+}
 
 int main ()
 {
@@ -98,10 +110,13 @@ int main ()
         int n_m=0;
        // int pos_n=0;
        // int pos_p=0;
-        int p_sum=0;
-        int n_sum=0;
-        int p_r=0;
-        int n_r=0;
+        int p_tmp=0;
+        int n_tmp=0;
+        int p_free=0;
+        int n_free=0;
+        int n_space=0;
+         int p_space=0;
+
       //  int r_sk;
         char c=0;
         elem *first_p=NULL, *last_p=NULL, *first_n=NULL, *last_n=NULL;
@@ -120,8 +135,12 @@ int main ()
             sum(c, n_muitnieki);
             fin.get(c);
         }
+        n_free=n_muitnieki;
+        p_free=p_muitnieki;
         int *arr_p=new int[p_muitnieki];///muitnieku darba laiki
         int *arr_n=new int[n_muitnieki];
+        int *id_p=new int[p_muitnieki];
+        int *id_n=new int[n_muitnieki];
         int *p_time=new int[p_muitnieki];///iecelotaju laiki pie muitniekiem
         int *n_time=new int[n_muitnieki];
         fin.get(c);
@@ -130,7 +149,7 @@ int main ()
             sum(c, p_laiks);
             fin.get(c);
         }
-        cout<<"p_laiks="<<p_laiks<<endl;
+        //cout<<"p_laiks="<<p_laiks<<endl;
         fin.get(c);
         while(c>='0'and c<='9')///p_laiks
         {
@@ -138,18 +157,20 @@ int main ()
             fin.get(c);
             if(c=='\n')break;
         }
-        cout<<"n_laiks="<<n_laiks<<endl;
-        fill_arr(arr_p,p_laiks, p_muitnieki);
+      //  cout<<"n_laiks="<<n_laiks<<endl;
+        fill_arr(arr_p,p_laiks, p_muitnieki);///darba laiki
         fill_arr(arr_n,n_laiks, n_muitnieki);
+        fill_arr(id_n,0, n_muitnieki);///id nr
+        fill_arr(id_p,0, p_muitnieki);
       //   print_arr(arr_p, p_muitnieki);
-        fill_arr(n_time,0, n_muitnieki);
+        fill_arr(n_time,0, n_muitnieki);///kopejais laiks
         fill_arr(p_time,0, p_muitnieki);
         p_laiks=0;
         n_laiks=0;
         fin.get(c);
-        print_arr(arr_p, p_muitnieki);
-        print_arr(arr_n, n_muitnieki);
-        while(fin)
+      //  print_arr(arr_p, p_muitnieki);
+      //  print_arr(arr_n, n_muitnieki);
+        while(fin)///turpina ar type un sarakstiem
         {
            if(c=='T')
             {
@@ -164,14 +185,14 @@ int main ()
                     sum(c, p_m);
                         fin.get(c);
                 }
-                cout<<"P nr="<<p_m<<endl;
+                //cout<<"P nr="<<p_m<<endl;
                 fin.get(c);
                 while(c>='0'and c<='9')///p_laiks konkretam muitniekam
                 {
                     sum(c, p_laiks);
                         fin.get(c);
                 }
-                cout<<"P laiks="<<p_laiks<<endl;
+                //cout<<"P laiks="<<p_laiks<<endl;
                 change_arr(arr_p,p_laiks, p_m-1);
                 p_m=0;
                 p_laiks=0;
@@ -211,7 +232,7 @@ int main ()
                     sum(c, p_laiks);
                         fin.get(c);
                 }
-                cout<<"P old ="<<p_laiks<<endl;
+              //  cout<<"P old ="<<p_laiks<<endl;
                 add_element (first_p, last_p,p_laiks);///vertibas pievienosana saistitajam sarakstam
 
                 p_laiks=0;
@@ -226,33 +247,112 @@ int main ()
                         fin.get(c);
                 }
 
-                cout<<"N ="<<n_laiks<<endl;
+               // cout<<"N ="<<n_laiks<<endl;
 
- add_element (first_n, last_n,n_laiks);
+                add_element (first_n, last_n,n_laiks);
                     //n_m=0;
                     n_laiks=0;
                 }
 
-            }
+            }///izveidoti saraksti
 
-            else if(c=='X')
+            if(c=='X')
             {
+                if(first_n==NULL && first_p==NULL)
+                {
                     cout<<"nothing"<<endl;
+                }
+                else///parstaigasim sarakstus
+                {
+                    elem *zp = first_p;
+                    elem *zn = first_n;
+                    while (zp!=NULL ||zn!=NULL)
+                    {
+                        if(zp!=NULL)
+                        {
+                            int min_p=0;
+                            //cout << zp->n << endl;
+                            p_tmp=zp->n;
+                            find_min(p_time,p_muitnieki, min_p);
+                            cout << "min_p="<<min_p<< endl;
+
+                            if(p_free!=0)//&&(min_p!=0&&min_p>=p_tmp))///ja ir brivs muitnieks
+                            {
+                                free_spot(id_p, p_muitnieki,p_space);///atrod vinu
+                                change_arr(id_p,p_tmp,p_space);///ienem vietu
+                                p_tmp=p_tmp+arr_p[p_space];///apr laiku
+                                change_arr(p_time,p_tmp,p_space);///saglaba laiku
+                                p_free--;///mazak brivo vietu
+
+                            }
+                            else
+                            {
+                                get_out(id_p, p_time, p_space);
+                                p_free++;
+                                zp=zp->next;
+                                delete_first(first_p);
+                            }
+
+                        }
+                        if(zn!=NULL)
+                        {
+                            int min_n=0;
+                            //cout << zn->n << endl;
+                            n_tmp=zn->n;
+                            find_min(n_time,n_muitnieki, min_n);
+                            cout << "min_n="<<min_n<< endl;
+                            if(n_free!=0)
+                            {
+                                free_spot(id_n, n_muitnieki,n_space);
+                                change_arr(id_n,n_tmp,n_space);
+                                n_tmp=n_tmp+arr_n[n_space];
+                                change_arr(n_time,n_tmp,n_space);
+                                n_free--;
+
+                            }
+                            else
+                            {
+                                get_out(id_n, n_time, n_space);
+                                n_free++;
+                                zn=zn->next;
+                                delete_first(first_n);
+                            }
+
+                        }
+                    p_tmp=0;
+                    n_tmp=0;
+                    n_space=0;
+                    p_space=0;
+                    }
+
+                }
+
             }
-
-
-
 
             fin.get(c);
         }
      //   print_arr(arr_p, p_muitnieki);
  // print_arr(arr_n, n_muitnieki);
+  cout << "id p=" << endl;
+ print_arr(id_p, p_muitnieki);
+   cout << "id n=" << endl;
+ print_arr(id_n, n_muitnieki);
+  cout << "n time=" << endl;
+ print_arr(n_time, n_muitnieki);
+   cout << "p time=" << endl;
+ print_arr(p_time, p_muitnieki);
+ cout << "list p" << endl;
      print_list (first_p);
+      cout << "list n" << endl;
       print_list (first_n);
      delete_list(first_p);
       delete_list(first_n);
         delete[] arr_p;
         delete[] arr_n;
+        delete[] p_time;
+        delete[] n_time;
+        delete[] id_p;
+        delete[] id_n;
         fin.close();
         fout.close();
 
