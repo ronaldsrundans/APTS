@@ -1,9 +1,41 @@
-
 #include <iostream>
 #include <fstream>
 
-
 using namespace std;
+
+struct elem
+{
+    int n;
+    elem *next;
+};
+void add_element (elem*&first, elem*&last, int i)///jauna elementa pievienosana saraksta gala
+{
+    elem *p = new elem;
+    p->n = i;
+    p->next = NULL;
+    if (first == NULL) first = p;///ja saraksts ir tukss, tad nomaina pirmo elementu
+    else last->next = p;///ja saraksts nav tukss, tad pieliek gala
+    last = p;
+};
+
+void print_list (elem *first)///saraksta izdrukasana
+{
+    for (elem *p = first; p!=NULL; p=p->next)
+    {
+        cout << p->n << endl;
+    };
+};
+
+void delete_list (elem*&first)///saraksta dzesana
+{
+    elem *p = first;
+    while (p!=NULL)
+    {
+        first = first->next;
+        delete p;
+        p = first;
+    };
+};
 int sum(char &c, int &summa)
 {
         int n=0;
@@ -36,9 +68,20 @@ void free_spot(int *arr, int n, int &num)
       break;
     }
   }
-
-
 };
+void find_min(int *arr, int n, int &num)
+{
+    int m=arr[0];
+    for(int i=0; i<n;i++)
+    {
+      if(arr[i]>m)
+    {
+      m=arr[i];
+    }
+  }
+  num=m;
+
+}
 void change_arr(int *arr, int n, int pos)
 {
      arr[pos]=n;
@@ -61,7 +104,7 @@ int main ()
         int n_r=0;
       //  int r_sk;
         char c=0;
-
+        elem *first_p=NULL, *last_p=NULL, *first_n=NULL, *last_n=NULL;
         fstream fin("in1.txt", ios::in);
         fstream fout("out.txt", ios::out);
         fin.get(c);
@@ -130,7 +173,7 @@ int main ()
                 }
                 cout<<"P laiks="<<p_laiks<<endl;
                 change_arr(arr_p,p_laiks, p_m-1);
-               // p_m=0;
+                p_m=0;
                 p_laiks=0;
             }
             else  if(c=='N')
@@ -168,25 +211,10 @@ int main ()
                     sum(c, p_laiks);
                         fin.get(c);
                 }
-              //  cout<<"P ="<<p_laiks<<endl;
-                    int pos_p=-1;
-                //int pos_p=-1;
- //cout<<"pos ="<<pos_p<<endl;
-                free_spot(p_time, p_muitnieki, pos_p);
+                cout<<"P old ="<<p_laiks<<endl;
+                add_element (first_p, last_p,p_laiks);///vertibas pievienosana saistitajam sarakstam
 
-               // cout<<"pos ="<<pos_p<<endl;
-                if(pos_p!=-1)///ja brivs muitnieks
-                {
-                    p_laiks=p_laiks+arr_p[pos_p];
-                  //   cout<<"P new ="<<p_laiks<<endl;
-                    change_arr(p_time,p_laiks, pos_p);
-                }
-
-
-                   // p_r++;
-
-                   // p_m=-1;
-                    p_laiks=0;
+                p_laiks=0;
                 }///pilsonis N
                 else if(c=='N')
                 {
@@ -197,9 +225,10 @@ int main ()
                     sum(c, n_laiks);
                         fin.get(c);
                 }
-             //   cout<<"N ="<<n_laiks<<endl;
 
+                cout<<"N ="<<n_laiks<<endl;
 
+ add_element (first_n, last_n,n_laiks);
                     //n_m=0;
                     n_laiks=0;
                 }
@@ -216,8 +245,12 @@ int main ()
 
             fin.get(c);
         }
-        print_arr(arr_p, p_muitnieki);
-  print_arr(arr_n, n_muitnieki);
+     //   print_arr(arr_p, p_muitnieki);
+ // print_arr(arr_n, n_muitnieki);
+     print_list (first_p);
+      print_list (first_n);
+     delete_list(first_p);
+      delete_list(first_n);
         delete[] arr_p;
         delete[] arr_n;
         fin.close();
