@@ -78,20 +78,27 @@ void free_spot(int *arr, int n, int &num)
 int find_min(int *arr, int n, int num)
 {
     int m=0;
-    for(int i=0; i<n;i++)
+
+    for(int i=0;i<n;i++)
     {
       if(arr[i]>0&&num==m)
         {
-          //  cout<<"ieraksta"<<endl;
+           // cout<<"ieraksta"<<endl;
             m=arr[i];
-         //   cout<<"m="<<m<<endl;
+            //cout<<"m="<<m<<endl;
         }
-     if(arr[i]<m && arr[i]!=0)
+        if(arr[i]<m && arr[i]!=0)
         {
+            //cout<<"arr i"<<arr[i]<<endl;
             m=arr[i];
-            return m;
+            //cout<<"size"<<i;
+            //return m;
         }
-  }
+    }
+
+
+
+
   return m;
 }
 void change_arr(int *arr, int n, int pos)
@@ -103,6 +110,28 @@ void get_out(int *arr_id, int *arr_time, int pos)
     cout<<arr_id[pos]<<" "<<arr_time[pos]<<endl;
     change_arr(arr_id, 0, pos);
     change_arr(arr_time, 0, pos);
+}
+int find_pn_min(int p,int n)
+{
+    if(p!=0&&n==0)
+    {
+        return p;
+    }
+    else if(n!=0&&p==0)
+    {
+         return n;
+    }
+    else if(n<=p&&n!=0)
+    {
+        return n;
+    }
+    else if(p<=n&&p!=0)
+    {
+        return p;
+    }
+  //  else return 0;
+
+
 }
 
 
@@ -127,7 +156,7 @@ int main ()
       //  int r_sk;
         char c=0;
         elem *first_p=NULL, *last_p=NULL, *first_n=NULL, *last_n=NULL;
-        fstream fin("in3.txt", ios::in);
+        fstream fin("in6.txt", ios::in);
         fstream fout("out.txt", ios::out);
         fin.get(c);
         while(c>='0'and c<='9')///p_muitnieki
@@ -272,53 +301,361 @@ int main ()
                 else///parstaigasim sarakstus
                 {
                     elem *zp = first_p;
+                    elem *zn = first_n;
                     int last_p=0;
-
-                    while (zp!=NULL)///kamer ir iebrauceji
+                    int last_n=0;
+                   //   p_tmp=zp->n;
+                     //   n_tmp=zn->n;
+                        int delay_p=0;///kavejas
+                        int min_p=0;
+                        int min_n=0;
+                        int delay_n=0;
+                        int min_pn=0;
+                while (zp!=NULL or zn!=NULL)///kamer ir iebrauceji   while
                     {
+                        p_tmp=0;
+                        n_tmp=0;
+                        delay_n=0;
+                        min_n=0;
+                        delay_p=0;
+                        min_p=0;
+                        min_pn=0;
                         if(zp!=NULL)
                         {
-                            int min_p=0;
                             min_p=find_min(p_time,p_muitnieki, min_p);
-                            int delay_p=0;///kavejas
                             p_tmp=zp->n;
-                            if(last_p>p_tmp)
-                                {
-                                    delay_p=last_p-p_tmp;
-                                }
+                         //  cout<<"p_tmp start="<< p_tmp<<endl;
+                         //  cout<<"p_min start="<<min_p<<endl;
 
-                          //  cout <<"min_p="<<min_p<< endl;
-                            if(p_free!=0)
-                            {
-                                free_spot(id_p, p_muitnieki,p_space);///atrod vinu
-                                change_arr(id_p,p_tmp,p_space);///ienem vietu
+                        }
+                        if(zn!=NULL)//||zp->n<zn->n)
+                        {
+                            min_n=0;
+                            min_n=find_min(n_time,n_muitnieki, min_n);
+                            n_tmp=zn->n;
+                        //    cout<<"n_tmp start="<< n_tmp<<endl;
+                        //    cout<<"n_min start="<< min_n<<endl;
 
-                                p_tmp=delay_p+p_tmp+arr_p[p_space];///apr laiku
-                                //cout <<"p_tmp="<<p_tmp<< endl;
-                                change_arr(p_time,p_tmp,p_space);///saglaba laiku
-                                p_free--;///mazak brivo vietu
-                                zp=zp->next;
-                                delete_first(first_p);
-                            }
-                            else
+                        }
+
+
+
+                   if(min_p!=0 or min_n!=0)
+                        {
+                             min_pn=find_pn_min(min_p,min_n);
+                        }
+
+
+                      //  cout<<"min="<< min_pn<<endl;
+
+
+
+
+
+                        if(last_p>p_tmp)
+                        {
+                            delay_p=last_p-p_tmp;
+                        }
+                        if(last_n>n_tmp)
+                        {
+                            delay_n=last_n-n_tmp;
+                        }
+                       // if(delay_n==152)break;
+
+ //if(min_pn==0&&p_free==p_muitnieki&&n_tmp==40)break;
+
+                        //if(min_pn==70&&p_tmp==0&&n_tmp==60)break;
+
+
+                        if(min_pn!=0)
+                        {
+                           /* if(min_pn==90&&p_free==p_muitnieki)
+                        {
+                            cout<<"n_min start="<< min_n<<endl;
+                            cout<<"tmp_n start="<< n_tmp<<endl;
+                            cout<<"tmp_free="<<n_free<<endl;
+                           // if (n_tmp<min_pn && p_tmp==0&&n_free==0)
+
+                            // break;
+                        }
+                          if (n_tmp<min_pn && p_tmp==0&&n_free==0&&p_free==p_muitnieki)
+
+                             break;*/
+
+
+
+                         // if (n_tmp<min_pn && p_tmp<min_pn)//&&(p_tmp==min_p or tmp==))
+
+                            // break;
+                            if(p_tmp>=min_pn or n_tmp>=min_pn)
                             {
-                                for(int j=0;j<p_muitnieki;j++)
+
+                                if(min_pn==min_p)
                                 {
-                                    if(min_p==p_time[j])
+
+                                    for(int j=0;j<p_muitnieki;j++)
+                                    {
+                                    if(min_pn==p_time[j])
                                     {
                                         last_p=p_time[j];
                                         get_out(id_p, p_time,j);
                                         p_free++;
+                                    //break;
+                                        }
                                     }
                                 }
+
+
+                                if(min_pn==min_n)
+                                {
+                                    for(int j=0;j<n_muitnieki;j++)
+                                    {
+                                    if(min_pn==n_time[j])
+                                    {
+                                    last_n=n_time[j];
+                                    get_out(id_n, n_time,j);
+                                    n_free++;
+                                    }
+                                    }
+                                }
+                                min_p=0;
+                                min_n=0;
+                                min_pn=0;
+                                continue;
+                            }
+
+                            if (n_tmp<min_pn && p_tmp==0&&p_free==p_muitnieki&&n_free==0)
+                            {
+
+
+                                if(min_pn==min_n)
+                                {
+
+                                    for(int j=0;j<n_muitnieki;j++)
+                                    {
+                                        if(min_pn==n_time[j])
+                                        {
+                                        last_n=n_time[j];
+                                        get_out(id_n, n_time,j);
+                                        n_free++;
+                                    }
+                                    }
+                                }
+                              //  if(min_pn==102&&p_free==p_muitnieki)break;
+                                min_p=0;
+                                min_n=0;
+                                min_pn=0;
+                                continue;
+                            }
+                            if (p_tmp<min_pn && n_tmp==0&&n_free==n_muitnieki&&p_free==0)
+                            {
+                                if(min_pn==min_p)
+                                {
+
+                                    for(int j=0;j<p_muitnieki;j++)
+                                    {
+                                    if(min_pn==p_time[j])
+                                    {
+                                        last_p=p_time[j];
+                                        get_out(id_p, p_time,j);
+                                        p_free++;
+                                    //break;
+                                        }
+                                    }
+                                }
+                                min_p=0;
+                                min_n=0;
+                                min_pn=0;
+                                continue;
                             }
                         }
+
+
+                        min_n=find_min(n_time,n_muitnieki, min_n);
+                        min_p=find_min(p_time,p_muitnieki, min_p);
+                       // cout<<"minp333="<< min_p<<endl;
+
+
+                        if(min_p!=0 or min_n!=0)
+                        {
+                             min_pn=find_pn_min(min_p,min_n);
+                        }
+
+                     //   cout<<"minp333="<< min_n<<endl;
+
+                    //if(min_pn==52)break;
+
+                       // cout<<"min45="<< min_pn<<endl;
+                      //  cout<<"mid_p_tmp="<<p_tmp<<endl;
+                      //  cout<<"mid_n_tmp="<<n_tmp<<endl;
+
+
+
+                        if ((p_tmp<n_tmp&&p_tmp!=0)or (n_tmp==0&&p_tmp!=0))//p_tmp<min_pn&&
+                        {
+                            if(p_free!=0)// && p_tmp<min_pn)
+                            {
+                                free_spot(id_p, p_muitnieki,p_space);///atrod vinu
+                                change_arr(id_p,p_tmp,p_space);///ienem vietu
+                                p_tmp=delay_p+p_tmp+arr_p[p_space];///apr laiku
+                               // cout <<"p_space="<<p_space<< endl;
+                               // cout <<"p_tmp="<<p_tmp<< endl;
+
+                                change_arr(p_time,p_tmp,p_space);///saglaba laiku
+                                p_free--;///mazak brivo vietu
+                                zp=zp->next;
+                                delete_first(first_p);
+                                //continue;
+                              // break;
+                            }
+                        }
+
+
+
+
+
+                        if ((p_tmp>n_tmp&&n_tmp!=0)or (p_tmp==0&&n_tmp!=0))
+                        {
+                            if(n_free!=0)// && p_tmp<min_pn)
+                            {
+
+                                free_spot(id_n, n_muitnieki,n_space);///atrod vinu
+                          //  cout<<"nspace="<<n_space<<endl;
+
+                                change_arr(id_n,n_tmp,n_space);///ienem vietu
+                                 //    cout <<"delay_n="<<delay_n<< endl;
+                                n_tmp=delay_n+n_tmp+arr_n[n_space];///apr laiku
+
+                           //  cout <<"n_space="<<n_space<< endl;
+                              //  cout <<"n_tmp="<<n_tmp<< endl;
+                                if(n_tmp==152)break;
+
+                               // cout <<"n_tmp="<<n_tmp<< endl;
+                                change_arr(n_time,n_tmp,n_space);///saglaba laiku
+                                n_free--;///mazak brivo vietu
+
+                                zn=zn->next;
+                                //if(zn->next==NULL)break;
+                                delete_first(first_n);
+                               // continue;
+                               //break;
+                            }
+
+                        }
+                        if(n_free==0 or p_free==0)///ja pilna rinda
+                        {
+
+                            if(p_free==0&&p_free==0)
+                                 {  // cout<<"yes1"<<endl;
+                                     // cout <<"p_tmp="<<p_tmp<< endl;
+                                     // cout <<"n_tmp="<<n_tmp<< endl;
+                                      //   cout<<"min45="<< min_pn<<endl;
+                                         if(min_pn==min_p)
+                                        {
+                                            for(int j=0;j<p_muitnieki;j++)
+                                            {
+                                            if(min_pn==p_time[j])
+                                            {
+                                            last_p=p_time[j];
+                                            get_out(id_p, p_time,j);
+                                            p_free++;
+
+                                                }
+                                            }
+                                        }
+                                          if(min_pn==min_n)
+                                        {
+                                        for(int j=0;j<n_muitnieki;j++)
+                                            {
+                                        if(min_pn==n_time[j])
+                                        {
+                                        last_n=n_time[j];
+                                        get_out(id_n, n_time,j);
+                                        n_free++;
+                                        }
+                                        }
+                                    }
+                                    min_p=0;
+                                    min_n=0;
+                                    min_pn=0;
+                                   // cout<<"minp661="<<min_n<<endl;
+
+
+                        min_n=find_min(n_time,n_muitnieki, min_n);
+                        min_p=find_min(p_time,p_muitnieki, min_p);
+                        //cout<<"minp661="<<min_n<<endl;
+                        if(min_p!=0 or min_n!=0)
+                        {
+                             min_pn=find_pn_min(min_p,min_n);
+                        }
+
+
+
+
+                        //continue;
+                        }
+
+
+                           if(p_free!=0 && p_tmp<=min_pn)//&&)//&&n_free!=0)
+                            {
+                                if (p_tmp!=0)
+                                {
+                                    free_spot(id_p, p_muitnieki,p_space);///atrod vinu
+                                change_arr(id_p,p_tmp,p_space);///ienem vietu
+                                p_tmp=delay_p+p_tmp+arr_p[p_space];///apr laiku
+                              //  cout <<"p_space="<<p_space<< endl;
+                               // cout <<"p_tmp="<<p_tmp<< endl;
+                                change_arr(p_time,p_tmp,p_space);///saglaba laiku
+                                p_free--;///mazak brivo vietu
+                                zp=zp->next;
+                                delete_first(first_p);
+                                }
+
+
+                            }
+
+
+                              if(n_free!=0 && n_tmp<=min_pn)//&&)//&&n_free!=0)
+                            {
+                                if(n_tmp!=0)
+                                {
+                                   free_spot(id_n, n_muitnieki,n_space);///atrod vinu
+                          //  cout<<"nspace="<<n_space<<endl;
+
+                                change_arr(id_n,n_tmp,n_space);///ienem vietu
+
+                                n_tmp=delay_n+n_tmp+arr_n[n_space];///apr laiku
+
+                             //cout <<"n_space="<<n_space<< endl;
+                              //  cout <<"n_tmp="<<n_tmp<< endl;
+
+                               // cout <<"n_tmp="<<n_tmp<< endl;
+                                change_arr(n_time,n_tmp,n_space);///saglaba laiku
+                                n_free--;///mazak brivo vietu
+
+                                zn=zn->next;
+                                //if(zn->next==NULL)break;
+                                delete_first(first_n);
+                                }
+
+                            }
+
+                        }
+
+                        p_tmp=0;
+                        n_tmp=0;
+
                     }
 
-                    while(zp==NULL&&p_free!=p_muitnieki)//&&min_p!=0)
+
+
+
+
+
+                   while(zp==NULL&&p_free!=p_muitnieki)///so beigas
                     {
-                    int min_p=0;
-                    min_p=find_min(p_time,p_muitnieki, min_p);
+                        int min_p=0;
+                        min_p=find_min(p_time,p_muitnieki, min_p);
 
                    // cout <<"min_p="<<min_p<< endl;
                             for(int j=0;j<p_muitnieki;j++)
@@ -330,29 +667,53 @@ int main ()
                                     }
                                 }
                                 min_p=find_min(p_time,p_muitnieki, min_p);
+                    }
+                    while(zn==NULL&&n_free!=n_muitnieki)//&&min_p!=0)
+                    {
+                    int min_n=0;
+                    min_n=find_min(n_time,n_muitnieki, min_n);
+
+                   // cout <<"min_p="<<min_p<< endl;
+                            for(int j=0;j<n_muitnieki;j++)
+                                {
+                                    if(min_n==n_time[j])
+                                    {
+                                        get_out(id_n, n_time,j);
+                                        n_free++;
+                                    }
+                                }
+                               // min_p=find_min(p_time,p_muitnieki, min_p);
 
                     }
 
 
+
+                    }
+                   /* w*/
+
+
+
                 }
 
-            }
 
             fin.get(c);
-        }
+            }
+
+
      //   print_arr(arr_p, p_muitnieki);
  // print_arr(arr_n, n_muitnieki);
-  /*cout << "id p=" << endl;
+ /* cout << "id p=" << endl;
+ /* cout << "id p=" << endl;
  print_arr(id_p, p_muitnieki);
    cout << "id n=" << endl;
  print_arr(id_n, n_muitnieki);
   cout << "n time=" << endl;
  print_arr(n_time, n_muitnieki);
    cout << "p time=" << endl;
- print_arr(p_time, p_muitnieki);*/
+ print_arr(p_time, p_muitnieki);
  cout << "list p" << endl;
      print_list (first_p);
-      cout << "list n" << endl;
+      cout << "list n" << endl;*/
       print_list (first_n);
      delete_list(first_p);
       delete_list(first_n);
