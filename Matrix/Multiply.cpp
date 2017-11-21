@@ -5,9 +5,9 @@ using namespace std;
 
 int main()
 {
-    fstream f("in.txt",ios::in);
+    fstream f("in3.txt",ios::in);
     int r1,r2,c1,c2;
-     double n,t,sum;
+    double n,t,sum;
     int i,j,k,l;
     f>>r1;
     f>>c1;
@@ -31,14 +31,12 @@ int main()
     {
         B[i]=new double[c2];
     }
-    for(i=0;i<r1;i++)
+    for(i=0;i<r2;i++)
     {
         for(j=0;j<c2;j++)
         {
             f>>t;
             B[i][j]=t;
-           // cout<<"t="<<t<<" r2="<<r2<<endl;
-
         }
     }
      f.close();
@@ -59,12 +57,10 @@ int main()
     {
         for(j=0;j<c2;j++)
         {
-            sum=0;
              for(k=0;k<r2;k++)
              {
-                sum=sum+A[i][k]*B[k][j];
+                C[i][j]=C[i][j]+A[i][k]*B[k][j];
              }
-             C[i][j]=sum;
         }
     }
  for(i=0;i<r1;i++)
@@ -87,6 +83,5 @@ int main()
     delete [] A;
     delete [] B;
     delete [] C;
-  //  f.close();
     return 0;
 }
