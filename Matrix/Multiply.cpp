@@ -62,8 +62,6 @@ int main()
             sum=0;
              for(k=0;k<r2;k++)
              {
-             cout<<A[i][k]<<" ";
-             cout<<B[k][j]<<endl;
                 sum=sum+A[i][k]*B[k][j];
              }
              C[i][j]=sum;
@@ -80,10 +78,7 @@ int main()
  for(i=0;i<r1;i++)
     {
        delete [] A[i];
-      //  delete [] B[i];
-       // delete [] C[i];
     }
-    //cout<<r1<<" "<<c1<<" "<<r2<<" "<<c2<<endl;
     for(i=0;i<r2;i++)
     {
 
