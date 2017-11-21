@@ -1,3 +1,4 @@
+
 #include <iostream>
 #include <fstream>
 using namespace std;
@@ -30,13 +31,13 @@ int main()
     {
         B[i]=new double[c2];
     }
-    for(i=0;i<r1;i++)
+    for(i=0;i<r2;i++)
     {
         for(j=0;j<c1;j++)
         {
             f>>t;
             B[i][j]=t;
-            cout<<"t="<<t<<" r2="<<r2<<endl;
+           // cout<<"t="<<t<<" r2="<<r2<<endl;
 
         }
     }
