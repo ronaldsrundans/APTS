@@ -31,9 +31,9 @@ int main()
     {
         B[i]=new double[c2];
     }
-    for(i=0;i<r2;i++)
+    for(i=0;i<r1;i++)
     {
-        for(j=0;j<c1;j++)
+        for(j=0;j<c2;j++)
         {
             f>>t;
             B[i][j]=t;
@@ -42,14 +42,14 @@ int main()
         }
     }
      f.close();
-    double **C=new double *[r2];
-    for(i=0;i<r2;i++)
+    double **C=new double *[r1];
+    for(i=0;i<r1;i++)
     {
-        C[i]=new double[c1];
+        C[i]=new double[c2];
     }
-    for(i=0;i<r2;i++)
+    for(i=0;i<r1;i++)
     {
-        for(j=0;j<c1;j++)
+        for(j=0;j<c2;j++)
         {
             C[i][j]=0;
         }
@@ -67,9 +67,9 @@ int main()
              C[i][j]=sum;
         }
     }
- for(i=0;i<r2;i++)
+ for(i=0;i<r1;i++)
     {
-        for(j=0;j<c1;j++)
+        for(j=0;j<c2;j++)
         {
             cout<<C[i][j]<<" ";
         }
@@ -78,11 +78,10 @@ int main()
  for(i=0;i<r1;i++)
     {
        delete [] A[i];
+       delete [] C[i];
     }
     for(i=0;i<r2;i++)
     {
-
-        delete [] C[i];
         delete [] B[i];
     }
     delete [] A;
