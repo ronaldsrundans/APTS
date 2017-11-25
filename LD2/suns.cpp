@@ -101,8 +101,9 @@ public:
     };
 
     void register_old(int id, ifstream &in, ofstream &out){
+        char pedina=0;
         if (id <= 99999){
-            char pedina;
+
             if (dog_exists(id) == false) {
                 suns *jauns = new suns;
                 jauns->id = id;
