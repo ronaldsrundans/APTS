@@ -6,8 +6,8 @@ int main()
 {
     fstream f("in.txt",ios::in);
     int r1,r2,c1,c2;
-    double n,t,sum,tmp;
-    int i,j,k,l;
+    double t,tmp;
+    int i,j,k;
     f>>r1;
     f>>c1;
     double **A=new double *[r1];
