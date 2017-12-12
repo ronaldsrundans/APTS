@@ -1,13 +1,12 @@
-
 #include <iostream>
 #include <fstream>
 using namespace std;
 
 int main()
 {
-    fstream f("in3.txt",ios::in);
+    fstream f("in.txt",ios::in);
     int r1,r2,c1,c2;
-    double n,t,sum;
+    double n,t,sum,tmp;
     int i,j,k,l;
     f>>r1;
     f>>c1;
@@ -45,22 +44,17 @@ int main()
     {
         C[i]=new double[c2];
     }
-    for(i=0;i<r1;i++)
-    {
-        for(j=0;j<c2;j++)
-        {
-            C[i][j]=0;
-        }
-    }
 
     for(i=0;i<r1;i++)
     {
         for(j=0;j<c2;j++)
         {
+            tmp=0;
              for(k=0;k<r2;k++)
              {
-                C[i][j]=C[i][j]+A[i][k]*B[k][j];
+                tmp=tmp+A[i][k]*B[k][j];
              }
+            C[i][j]=tmp;
         }
     }
  for(i=0;i<r1;i++)
@@ -85,3 +79,4 @@ int main()
     delete [] C;
     return 0;
 }
+
