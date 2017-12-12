@@ -5,9 +5,8 @@ using namespace std;
 int main()
 {
     fstream f("in.txt",ios::in);
-    int r1,r2,c1,c2,l1,l2,l3;
-    double n,t,sum, tmp;
-    int i,j,k,l;
+    int r1,r2,c1,c2,l1,l2,l3,i,j,k;
+    double t,tmp;
     f>>r1;
     f>>c1;
     l1=c1*r1;
