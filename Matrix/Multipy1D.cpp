@@ -28,18 +28,22 @@ int main()
     f>>r2;
     f>>c2;
     l2=r2*c2;
+    //cout<<"c2"<<c2<<endl;
     double *B=new double [l2];
     /*for(i=0;i<r2;i++)
     {
         B[i]=new double[c2];
     }*/
-    for(i=0;i<l2;i++)
+    for(i=0;i<r2;i++)
     {
-       // for(j=0;j<l2;j++)
-       // {
+        for(j=0;j<c2;j++)
+        {
             f>>t;
-            B[i]=t;
-       // }
+            B[i+j*r2]=t;
+            //cout<< i+j*r2<<" "<<i<<" "<<j<<endl;
+          // cout<<endl;
+            //coutendl;
+        }
     }
      f.close();
      l3=r1*c2;
@@ -56,16 +60,26 @@ int main()
        // }
     }
 
+
+
+
+
+tmp=0;
+
     for(i=0;i<r1;i++)
     {
+
         for(j=0;j<c2;j++)
         {
-            tmp=0;
+
              for(k=0;k<r2;k++)
              {
                 tmp=tmp+A[i*r1+k]*B[j*c2+k];
+cout<<"A*B="<<A[i*r1+k]<<"*"<<B[j*c2+k]<<"="<<tmp<<endl;
              }
+             cout<<"tmp="<<tmp<<endl;
              C[i*r1+j]=tmp;
+             tmp=0;
         }
     }
  for(i=0;i<c2;i++)
