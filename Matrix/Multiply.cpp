@@ -5,15 +5,15 @@ using namespace std;
 int main()
 {
     fstream f("in.txt",ios::in);
-    int r1,r2,c1,c2;
-    double t,tmp;
-    int i,j,k;
+    fstream fout("out.txt",ios::out);
+    int r1,r2,c1,c2,i,j,k;
+    float t;
     f>>r1;
     f>>c1;
-    double **A=new double *[r1];
+    float **A=new float *[r1];
     for(i=0;i<r1;i++)
     {
-        A[i]=new double[c1];
+        A[i]=new float[c1];
     }
     for(i=0;i<r1;i++)
     {
@@ -25,10 +25,10 @@ int main()
     }
     f>>r2;
     f>>c2;
-    double **B=new double *[r2];
+    float **B=new float *[r2];
     for(i=0;i<r2;i++)
     {
-        B[i]=new double[c2];
+        B[i]=new float[c2];
     }
     for(i=0;i<r2;i++)
     {
@@ -39,32 +39,35 @@ int main()
         }
     }
      f.close();
-    double **C=new double *[r1];
+    float **C=new float *[r1];
     for(i=0;i<r1;i++)
     {
-        C[i]=new double[c2];
+        C[i]=new float[c2];
     }
 
     for(i=0;i<r1;i++)
     {
         for(j=0;j<c2;j++)
         {
-            tmp=0;
+            t=0;
              for(k=0;k<r2;k++)
              {
-                tmp=tmp+A[i][k]*B[k][j];
+                t=t+A[i][k]*B[k][j];
              }
-            C[i][j]=tmp;
+            C[i][j]=t;
         }
     }
  for(i=0;i<r1;i++)
     {
         for(j=0;j<c2;j++)
         {
-            cout<<C[i][j]<<" ";
+           // cout<<C[i][j]<<" ";
+             fout<<C[i][j]<<" ";
         }
-        cout<<endl;
+       // cout<<endl;
+        fout<<endl;
     }
+     fout.close();
  for(i=0;i<r1;i++)
     {
        delete [] A[i];
@@ -79,4 +82,3 @@ int main()
     delete [] C;
     return 0;
 }
-
